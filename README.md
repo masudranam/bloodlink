@@ -125,6 +125,11 @@ cd backend
 
 - API: <http://localhost:8080>
 - Health: <http://localhost:8080/actuator/health>
+- **API docs: <http://localhost:8080/swagger-ui.html>**
+
+Swagger UI is how you exercise the API by hand. Call `POST /api/auth/login`, copy
+the `accessToken` out of the response, press **Authorize**, paste it, and every
+protected endpoint is callable from the browser with the token attached.
 
 Flyway migrates on startup and Hibernate runs with `ddl-auto=validate`, so a
 mismatch between an entity and a migration fails the boot rather than altering a
@@ -139,6 +144,21 @@ npm run dev
 ```
 
 <http://localhost:5173>, with `/api` proxied to the backend on 8080.
+
+### Environment variables
+
+| Variable | Default | What it does |
+| -------- | ------- | ------------ |
+| `ROKTOLINK_DB_URL` | `jdbc:postgresql://localhost:5433/roktolink` | JDBC url |
+| `ROKTOLINK_DB_USER`, `ROKTOLINK_DB_PASSWORD` | `roktolink` | database credentials |
+| `ROKTOLINK_DB_PORT` | `5433` | host port Docker Compose publishes |
+| `ROKTOLINK_JWT_SECRET` | a placeholder committed to this repo | HMAC key that signs access tokens, at least 32 bytes |
+| `ROKTOLINK_PORT` | `8080` | port the API listens on |
+
+The JWT secret shipped in `application.yml` is a development placeholder and is
+not a secret in any meaningful sense — it is in the repository. Anything running
+anywhere real must set `ROKTOLINK_JWT_SECRET`; startup fails if the value is
+shorter than 32 bytes.
 
 ### Windows note
 
@@ -196,8 +216,9 @@ docs/        BACKLOG.md — the ten issues and their dependencies
 
 ## Stack
 
-Java 21, Spring Boot 3.5.16, Maven (wrapper), PostgreSQL 16, Flyway, JUnit 5,
-Testcontainers, Jacoco, Checkstyle. React 18, Vite 7, TypeScript 5.9, React
+Java 21, Spring Boot 3.5.16, Maven (wrapper), PostgreSQL 16, Flyway, Spring
+Security with a stateless JWT chain, springdoc OpenAPI, JUnit 5, Testcontainers,
+Jacoco, Checkstyle. React 18, Vite 7, TypeScript 5.9, React
 Query, plain CSS — no UI kit. Docker Compose locally, GitHub Actions for CI.
 
 ## Deliberately out of scope

@@ -54,6 +54,21 @@ public class AppUser {
         // for JPA
     }
 
+    /**
+     * Creates a user ready to persist.
+     *
+     * @param fullName     display name
+     * @param phone        canonical E.164 phone, already normalised
+     * @param passwordHash a BCrypt hash, never a plaintext password
+     * @param role         DONOR or REQUESTER
+     */
+    public AppUser(String fullName, String phone, String passwordHash, UserRole role) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.passwordHash = passwordHash;
+        this.role = role;
+    }
+
     @PrePersist
     void onCreate() {
         Instant now = Instant.now();

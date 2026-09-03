@@ -32,10 +32,26 @@ management:
         include: health,info
 
 roktolink:
+  security:
+    jwt:
+      # Development placeholder only, and not a secret in any meaningful sense:
+      # it is in the repository. Anything real must set ROKTOLINK_JWT_SECRET.
+      # HS256 needs at least 32 bytes.
+      secret: ${ROKTOLINK_JWT_SECRET:dev-only-insecure-roktolink-signing-key-change-me}
+      # Twelve hours: there is no refresh token, so this is how long a session
+      # lasts. Shorter means logging in mid-task; longer widens the window on a
+      # stolen token.
+      ttl: PT12H
+
   eligibility:
     # Pillar 2: eligibility is COMPUTED from this interval, never stored.
     # Consumed from issue 4 onwards; nothing reads it yet.
     donation-interval-days: 90
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
 
 logging:
   level:
