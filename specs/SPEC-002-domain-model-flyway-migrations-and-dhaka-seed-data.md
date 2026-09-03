@@ -1,6 +1,6 @@
 # SPEC-002: Domain model, Flyway migrations and Dhaka seed data
 
-**Status:** Draft
+**Status:** Approved
 **Issue:** #2
 **Depends on:** SPEC-001
 
@@ -206,3 +206,4 @@ bridges the two, so the native SQL written by hand in SPEC-007 stays readable.
 | ---- | ------ | ---- |
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-03 | Draft | Filled in: scope, nine acceptance criteria, two migrations, entity layout. |
+| 2026-09-03 | Approved | Approved on review of PR #1. Implementation on feat/002. |
