@@ -36,6 +36,6 @@ the source of truth, not this issue.
 
 ## Done when
 
-- [ ] Every AC above has at least one test whose method name starts with its id
+- [ ] Every AC above traced to an `acN_` test or to manual verification in the PR
 - [ ] Spec status moved to Implemented
 - [ ] CI green (Checkstyle, Testcontainers tests, coverage gate, frontend lint and build)

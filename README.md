@@ -60,17 +60,16 @@ Structural decisions are in [`docs/adr`](docs/adr).
 
 ### The traceability rule
 
-**Non-negotiable: every acceptance criterion gets at least one test whose method
-name starts with the criterion id.**
+**Every acceptance criterion must be traceable to the evidence that it holds.
+Where that evidence is a test, the test's method name starts with the criterion
+id — no exceptions.**
 
 ```java
 @Test
 void ac3_secondPledgeBySameDonor_returns409() { ... }
 ```
 
-A reviewer greps `ac3_` and sees the criterion is covered. Nothing else in the
-repository connects a written requirement to a passing test, so this convention
-carries the whole idea:
+A reviewer greps `ac3_` and sees the criterion is covered:
 
 ```bash
 # Which tests cover AC-3?
@@ -82,6 +81,37 @@ after merge** — the test names reference them.
 
 This is also why Checkstyle only inspects `src/main/java`: `ac3_secondPledge...`
 violates the standard `MethodName` rule, and the convention wins.
+
+### What gets a test, and what gets verified by hand
+
+Not every criterion is worth a test, and pretending otherwise produces tests that
+assert the framework works. Tests are written where the logic is genuinely
+non-obvious or where being wrong is dangerous:
+
+- the blood group compatibility matrix,
+- the eligibility date arithmetic,
+- the request state machine's transition guards,
+- and whatever else in the service layer the coverage gate requires.
+
+Controllers, repositories, DTO mapping and configuration are **not** unit tested.
+They are exercised by hand, and the pull request carries the evidence: the request
+made, and the response and database state that came back. `SPEC-002` shipped with
+no tests at all and a page of `psql` output instead, which is the right trade for
+a spec that is entirely schema.
+
+So a criterion is satisfied by an `acN_` test **or** by transcribed manual
+verification in the pull request, and the PR template asks which. A criterion with
+neither is not done.
+
+Two consequences worth stating plainly, because both have already bitten:
+
+- **A criterion can be partly verified.** `SPEC-003` AC-8 asserted that a `DONOR`
+  token authenticates with `ROLE_DONOR`; nothing in that issue was role-gated, so
+  only the claim was checkable. It was recorded as half-verified and finished in
+  `SPEC-004`, rather than ticked.
+- **Manual verification finds things tests would not.** Both bugs found so far — a
+  malformed body answering `401` instead of `400`, and a rejected blood group not
+  naming its field — came from typing `curl` commands, not from the suite.
 
 ---
 
