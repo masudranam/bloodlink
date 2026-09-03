@@ -44,7 +44,7 @@ Issue 5 is the only one that can be built in parallel with the 2 → 3 → 4 cha
 | 1 | Draft | Skeleton and harness are in place; acceptance criteria still to be written. |
 | 2 | Implemented | Schema, entities and seed data delivered; verified by hand, no automated tests by design. |
 | 3 | Implemented | Register, login and /me with BCrypt and a stateless JWT chain; Swagger UI added. |
-| 4 | Draft | |
+| 4 | Approved | Spec merged 2026-09-03 in PR #16. |
 | 5 | Draft | |
 | 6 | Draft | |
 | 7 | Draft | |
