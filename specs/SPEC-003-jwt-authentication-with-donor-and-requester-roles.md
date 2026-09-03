@@ -1,6 +1,6 @@
 # SPEC-003: JWT authentication with DONOR and REQUESTER roles
 
-**Status:** Draft
+**Status:** Approved
 **Issue:** #4 (backlog item 3)
 **Depends on:** SPEC-002
 
@@ -248,3 +248,4 @@ com.roktolink.user            AppUserRepository (added to the existing package)
 | ---- | ------ | ---- |
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-03 | Draft | Filled in: scope, ten acceptance criteria, three endpoints, one additive migration. |
+| 2026-09-03 | Approved | Approved on review of PR #14. Coverage blocker settled by testing the auth service; springdoc approved. |
