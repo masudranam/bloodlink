@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+  <!--
+    Spring Boot entry points look like utility classes (a single static main)
+    but are also @Configuration classes, so they must keep a public no-arg
+    constructor for CGLIB.
+  -->
+  <suppress checks="HideUtilityClassConstructor" files=".*Application\.java$"/>
+</suppressions>

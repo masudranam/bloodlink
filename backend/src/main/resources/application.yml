@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: roktolink
+
+  datasource:
+    url: ${ROKTOLINK_DB_URL:jdbc:postgresql://localhost:5433/roktolink}
+    username: ${ROKTOLINK_DB_USER:roktolink}
+    password: ${ROKTOLINK_DB_PASSWORD:roktolink}
+
+  jpa:
+    # Non-negotiable: the schema is owned by Flyway, never by Hibernate.
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+
+server:
+  port: ${ROKTOLINK_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+roktolink:
+  eligibility:
+    # Pillar 2: eligibility is COMPUTED from this interval, never stored.
+    # Consumed from issue 4 onwards; nothing reads it yet.
+    donation-interval-days: 90
+
+logging:
+  level:
+    org.flywaydb: INFO

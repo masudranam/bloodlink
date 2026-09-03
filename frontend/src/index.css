@@ -1,0 +1,84 @@
+:root {
+  --ink: #17151a;
+  --ink-soft: #5d5866;
+  --paper: #fbf9f7;
+  --card: #ffffff;
+  --line: #e6e1dd;
+  --blood: #a8202c;
+
+  color-scheme: light;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.shell {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+
+.shell__header {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.shell__header h1 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--blood);
+}
+
+.shell__tagline {
+  margin: 0.35rem 0 0;
+  color: var(--ink-soft);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.card p {
+  margin: 0;
+}
+
+.rules {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.rules li + li {
+  margin-top: 0.6rem;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: #f3efec;
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}

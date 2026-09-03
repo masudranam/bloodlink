@@ -1,0 +1,16 @@
+# Normalise to LF in the repository; Git may still check out CRLF on Windows.
+* text=auto eol=lf
+
+# Scripts that must stay LF even on a Windows working copy: CRLF breaks them
+# when CI runs them on Linux.
+mvnw          text eol=lf
+*.sh          text eol=lf
+
+# Windows-only scripts keep CRLF.
+mvnw.cmd      text eol=crlf
+*.bat         text eol=crlf
+
+# Never touched.
+*.png         binary
+*.jpg         binary
+*.ico         binary

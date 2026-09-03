@@ -1,0 +1,29 @@
+# Java / Maven
+target/
+!.mvn/wrapper/maven-wrapper.properties
+*.log
+*.class
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# Editors
+.idea/
+*.iml
+.vscode/
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# Telemetry written into the repo by the VS Code "Copilot App Modernization"
+# extension when it sees a pom.xml. Not ours, not source.
+**/.github/modernize/
+
+# Local env
+.env
+.env.*
+!.env.example

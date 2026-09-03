@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<!--
+  RoktoLink Checkstyle ruleset.
+
+  Deliberately small: rules that catch real mistakes, not formatting taste.
+  Every violation is severity=error and fails the build (see pom.xml,
+  violationSeverity=warning), so the Definition of Done item "no new
+  Checkstyle warnings" is enforced rather than advisory.
+
+  Applies to src/main/java only. Test sources are excluded on purpose: the
+  traceability convention requires method names like ac3_pledgeTwice_returns409,
+  which the MethodName rule would reject.
+-->
+<module name="Checker">
+  <property name="severity" value="error"/>
+  <property name="charset" value="UTF-8"/>
+  <property name="fileExtensions" value="java"/>
+
+  <module name="SuppressionFilter">
+    <property name="file" value="${checkstyle.suppressions.file}" default=""/>
+    <property name="optional" value="true"/>
+  </module>
+
+  <module name="NewlineAtEndOfFile"/>
+  <module name="FileTabCharacter"/>
+
+  <module name="RegexpSingleline">
+    <property name="format" value="\s+$"/>
+    <property name="message" value="Line has trailing whitespace."/>
+  </module>
+
+  <module name="LineLength">
+    <property name="max" value="120"/>
+    <property name="ignorePattern" value="^package .*|^import .*|^\s*\*.*https?://"/>
+  </module>
+
+  <module name="TreeWalker">
+    <!-- Imports -->
+    <module name="AvoidStarImport"/>
+    <module name="IllegalImport"/>
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+
+    <!-- Blocks and control flow -->
+    <module name="NeedBraces"/>
+    <module name="LeftCurly"/>
+    <module name="RightCurly"/>
+    <module name="EmptyStatement"/>
+    <module name="FallThrough"/>
+    <module name="MissingSwitchDefault"/>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+
+    <!-- Correctness -->
+    <module name="EqualsHashCode"/>
+    <module name="StringLiteralEquality"/>
+    <module name="NoFinalizer"/>
+    <module name="OneTopLevelClass"/>
+    <module name="UpperEll"/>
+    <module name="ArrayTypeStyle"/>
+
+    <!-- Design -->
+    <module name="FinalClass"/>
+    <module name="HideUtilityClassConstructor"/>
+    <module name="ModifierOrder"/>
+    <module name="RedundantModifier"/>
+
+    <!-- Naming -->
+    <module name="PackageName"/>
+    <module name="TypeName"/>
+    <module name="MethodName"/>
+    <module name="ConstantName"/>
+    <module name="MemberName"/>
+    <module name="LocalVariableName"/>
+    <module name="ParameterName"/>
+
+    <!-- Whitespace -->
+    <module name="WhitespaceAfter"/>
+    <module name="WhitespaceAround"/>
+    <module name="GenericWhitespace"/>
+    <module name="MethodParamPad"/>
+    <module name="NoWhitespaceBefore"/>
+    <module name="Indentation">
+      <property name="basicOffset" value="4"/>
+      <property name="lineWrappingIndentation" value="8"/>
+      <property name="arrayInitIndent" value="4"/>
+      <property name="throwsIndent" value="8"/>
+    </module>
+  </module>
+</module>
