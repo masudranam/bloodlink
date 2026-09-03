@@ -8,19 +8,23 @@ Closes #<n>
 ## Acceptance criteria coverage
 
 <!--
-List every AC in the spec against the test that proves it. Method names must
-start with the criterion id so a reviewer can grep for `ac3_` and find it.
+Every AC in the spec, against the evidence that it holds. Evidence is either a
+test whose method name starts with the criterion id, or manual verification
+transcribed in this PR. Say which. A criterion with neither is not done, and a
+criterion only partly verified says so rather than being ticked.
 -->
 
-| AC | Test |
-| -- | ---- |
+| AC | Evidence |
+| -- | -------- |
 | AC-1 | `ac1_<...>` in `<TestClass>` |
-| AC-2 | `ac2_<...>` in `<TestClass>` |
+| AC-2 | manual — see "Manual verification" below |
+| AC-3 | partly: <what was checked, and what is still open> |
 
 ## Definition of Done
 
 - [ ] Spec status updated to Implemented
-- [ ] One or more `acN_` tests per acceptance criterion
+- [ ] Every acceptance criterion traced above to an `acN_` test or to manual evidence in this PR
+- [ ] Manual verification transcribed: the request made, and the response or database state it returned
 - [ ] Jacoco line coverage >= 80% on the service layer (build fails otherwise)
 - [ ] OpenAPI spec regenerated
 - [ ] No new Checkstyle or ESLint warnings
