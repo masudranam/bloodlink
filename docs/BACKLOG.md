@@ -35,7 +35,7 @@ Issue 5 is the only one that can be built in parallel with the 2 → 3 → 4 cha
 | # | Spec status | Notes |
 | - | ----------- | ----- |
 | 1 | Draft | Skeleton and harness are in place; acceptance criteria still to be written. |
-| 2 | Draft | |
+| 2 | Approved | Spec merged 2026-09-03 in PR #1. Implementation not started. |
 | 3 | Draft | |
 | 4 | Draft | |
 | 5 | Draft | |
