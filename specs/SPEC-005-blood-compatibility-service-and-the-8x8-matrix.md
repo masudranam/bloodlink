@@ -1,6 +1,6 @@
 # SPEC-005: BloodCompatibilityService and the 8x8 matrix
 
-**Status:** Draft
+**Status:** Approved
 **Issue:** #6 (backlog item 5)
 **Depends on:** SPEC-001
 
@@ -146,3 +146,4 @@ statements of the same rule can be made to agree.
 | ---- | ------ | ---- |
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-03 | Draft | Filled in: eight acceptance criteria, the full 8x8 table, no API and no migration. |
+| 2026-09-03 | Approved | Approved on review of PR #19. |
