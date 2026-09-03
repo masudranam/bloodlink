@@ -1,7 +1,7 @@
 # SPEC-010: OpenAPI docs, structured logging and stale request expiry
 
 **Status:** Draft
-**Issue:** #10
+**Issue:** #10 (backlog item 10)
 **Depends on:** SPEC-009
 
 ---

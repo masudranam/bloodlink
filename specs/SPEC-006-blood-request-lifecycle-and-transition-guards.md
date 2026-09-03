@@ -1,7 +1,7 @@
 # SPEC-006: Blood request lifecycle and transition guards
 
 **Status:** Draft
-**Issue:** #6
+**Issue:** #7 (backlog item 6)
 **Depends on:** SPEC-003
 
 ---

@@ -1,7 +1,7 @@
 # SPEC-007: Donor search: compatible, eligible, within N km
 
 **Status:** Draft
-**Issue:** #7
+**Issue:** #11 (backlog item 7)
 **Depends on:** SPEC-004, SPEC-005, SPEC-006
 
 ---
