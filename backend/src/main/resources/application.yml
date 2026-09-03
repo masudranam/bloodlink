@@ -45,8 +45,10 @@ roktolink:
 
   eligibility:
     # Pillar 2: eligibility is COMPUTED from this interval, never stored.
-    # Consumed from issue 4 onwards; nothing reads it yet.
     donation-interval-days: 90
+    # Eligibility is a question about the donor's calendar day, not the server's.
+    # A server running in UTC would call a Dhaka donor eligible six hours late.
+    zone: Asia/Dhaka
 
 springdoc:
   swagger-ui:
