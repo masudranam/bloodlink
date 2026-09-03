@@ -45,7 +45,7 @@ Issue 5 is the only one that can be built in parallel with the 2 → 3 → 4 cha
 | 2 | Implemented | Schema, entities and seed data delivered; verified by hand, no automated tests by design. |
 | 3 | Implemented | Register, login and /me with BCrypt and a stateless JWT chain; Swagger UI added. |
 | 4 | Implemented | Donor profile CRUD with isEligible and nextEligibleDate computed on every read. |
-| 5 | Draft | |
+| 5 | Approved | Spec merged 2026-09-03 in PR #19. |
 | 6 | Draft | |
 | 7 | Draft | |
 | 8 | Draft | |
