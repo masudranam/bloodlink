@@ -1,7 +1,7 @@
 # SPEC-001: Repo skeleton, local infrastructure and green CI
 
 **Status:** Draft
-**Issue:** #1
+**Issue:** #2 (backlog item 1)
 **Depends on:** none
 
 ---

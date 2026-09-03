@@ -1,7 +1,7 @@
 # SPEC-003: JWT authentication with DONOR and REQUESTER roles
 
 **Status:** Draft
-**Issue:** #3
+**Issue:** #4 (backlog item 3)
 **Depends on:** SPEC-002
 
 ---

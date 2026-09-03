@@ -1,7 +1,7 @@
 # SPEC-005: BloodCompatibilityService and the 8x8 matrix
 
 **Status:** Draft
-**Issue:** #5
+**Issue:** #6 (backlog item 5)
 **Depends on:** SPEC-001
 
 ---

@@ -1,7 +1,7 @@
 # SPEC-009: React client: auth, feed, search and pledge flow
 
 **Status:** Draft
-**Issue:** #9
+**Issue:** #9 (backlog item 9)
 **Depends on:** SPEC-008
 
 ---

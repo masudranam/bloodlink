@@ -1,7 +1,7 @@
 # SPEC-008: Pledge, accept, contact reveal and audit log
 
 **Status:** Draft
-**Issue:** #8
+**Issue:** #8 (backlog item 8)
 **Depends on:** SPEC-007
 
 ---

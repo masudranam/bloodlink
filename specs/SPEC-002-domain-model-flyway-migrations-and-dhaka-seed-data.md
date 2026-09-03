@@ -1,7 +1,7 @@
 # SPEC-002: Domain model, Flyway migrations and Dhaka seed data
 
 **Status:** Approved
-**Issue:** #2
+**Issue:** #3 (backlog item 2)
 **Depends on:** SPEC-001
 
 ---

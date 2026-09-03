@@ -1,7 +1,7 @@
 # SPEC-004: Donor profile CRUD with computed eligibility
 
 **Status:** Draft
-**Issue:** #4
+**Issue:** #5 (backlog item 4)
 **Depends on:** SPEC-003
 
 ---
