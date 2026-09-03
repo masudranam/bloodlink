@@ -1,6 +1,6 @@
 # SPEC-004: Donor profile CRUD with computed eligibility
 
-**Status:** Approved
+**Status:** Implemented
 **Issue:** #5 (backlog item 4)
 **Depends on:** SPEC-003
 
@@ -283,3 +283,4 @@ serialises as `eligible` by default, so the response record names it explicitly.
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-03 | Draft | Filled in: four endpoints, thirteen acceptance criteria, no migration. |
 | 2026-09-03 | Approved | Approved on review of PR #16. |
+| 2026-09-03 | Implemented | Four endpoints, no migration, 24 tests. All thirteen criteria verified; AC-13 by unit test rather than by curl, since the server zone cannot be changed from a request. |

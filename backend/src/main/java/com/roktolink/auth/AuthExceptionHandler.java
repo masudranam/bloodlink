@@ -1,5 +1,6 @@
 package com.roktolink.auth;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.roktolink.auth.service.DuplicatePhoneException;
 import com.roktolink.auth.service.InvalidCredentialsException;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/** Turns auth failures into RFC 7807 problem responses. */
+/** Turns request and auth failures into RFC 7807 problem responses. */
 @RestControllerAdvice
 public class AuthExceptionHandler {
 
@@ -36,30 +37,31 @@ public class AuthExceptionHandler {
     }
 
     /**
-     * A body Jackson cannot even turn into the request object — most often an
-     * unknown enum value such as {@code "role": "ADMIN"}.
+     * A body Jackson cannot even turn into the request object.
      *
-     * <p>This fails before bean validation runs, so without this handler the
-     * exception escapes to the container's {@code /error} dispatch, which the
-     * stateless filter chain refuses, and the caller sees a baffling 401 instead
-     * of being told which field is wrong.
+     * <p>Two shapes reach here and both must name the field. An unknown enum
+     * constant arrives as {@link InvalidFormatException}; a value rejected by a
+     * {@code @JsonCreator} — such as a blood group outside the eight symbols —
+     * arrives as a {@code ValueInstantiationException} instead, which is why this
+     * reads the path off {@link JsonMappingException} rather than one subclass.
+     *
+     * <p>This also has to exist at all: deserialisation fails before bean
+     * validation runs, so without a handler the exception escapes to the
+     * container's {@code /error} dispatch and the caller sees a baffling 401.
      *
      * @param exception the deserialisation failure
-     * @return 400 naming the field, and the values that would have been accepted
+     * @return 400 naming the field, and the accepted values where they are known
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ProblemDetail onUnreadableBody(HttpMessageNotReadableException exception) {
         ProblemDetail problem = problem(HttpStatus.BAD_REQUEST, "Malformed request body", "malformed-body");
 
-        if (exception.getCause() instanceof InvalidFormatException invalid) {
-            String field = invalid.getPath().stream()
+        if (exception.getCause() instanceof JsonMappingException mapping) {
+            String field = mapping.getPath().stream()
                     .map(reference -> reference.getFieldName() == null ? "?" : reference.getFieldName())
                     .collect(Collectors.joining("."));
-            Class<?> target = invalid.getTargetType();
-            String allowed = target != null && target.isEnum()
-                    ? " must be one of " + String.join(", ", enumNames(target))
-                    : " is not a valid value";
-            problem.setProperty("errors", Map.of(field.isEmpty() ? "body" : field, allowed.trim()));
+            problem.setProperty("errors",
+                    Map.of(field.isEmpty() ? "body" : field, describe(mapping)));
         }
         return problem;
     }
@@ -78,6 +80,38 @@ public class AuthExceptionHandler {
     @ExceptionHandler(InvalidCredentialsException.class)
     ProblemDetail onInvalidCredentials(InvalidCredentialsException exception) {
         return problem(HttpStatus.UNAUTHORIZED, exception.getMessage(), "invalid-credentials");
+    }
+
+    /**
+     * Says what would have been accepted, when that is knowable.
+     *
+     * @param mapping the Jackson failure
+     * @return a message listing an enum's constants, or a generic rejection
+     */
+    private static String describe(JsonMappingException mapping) {
+        if (mapping instanceof InvalidFormatException invalid) {
+            Class<?> target = invalid.getTargetType();
+            if (target != null && target.isEnum()) {
+                // A plain enum: the constant names are the wire format.
+                return "must be one of " + String.join(", ", enumNames(target));
+            }
+        }
+        // A @JsonCreator that rejected the value, such as BloodGroup. Its own
+        // message says what is accepted, which for BloodGroup is the symbols
+        // rather than the constant names - listing A_POSITIVE would be worse
+        // than saying nothing.
+        if (rootCause(mapping) instanceof IllegalArgumentException illegal && illegal.getMessage() != null) {
+            return illegal.getMessage();
+        }
+        return "is not a valid value";
+    }
+
+    private static Throwable rootCause(Throwable throwable) {
+        Throwable current = throwable;
+        while (current.getCause() != null && current.getCause() != current) {
+            current = current.getCause();
+        }
+        return current;
     }
 
     private static String[] enumNames(Class<?> enumType) {

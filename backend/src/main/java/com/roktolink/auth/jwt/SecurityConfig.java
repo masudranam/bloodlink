@@ -57,7 +57,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain apiFilterChain(HttpSecurity http, ProblemDetailEntryPoint entryPoint) throws Exception {
+    SecurityFilterChain apiFilterChain(HttpSecurity http,
+                                       ProblemDetailEntryPoint entryPoint,
+                                       ProblemDetailAccessDeniedHandler deniedHandler) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
@@ -69,11 +71,18 @@ public class SecurityConfig {
                         // exception that escapes a controller advice comes back as
                         // a misleading 401 instead of its real status.
                         .requestMatchers("/error").permitAll()
+                        // SPEC-004: the first role gate in the project. A
+                        // REQUESTER token is somebody, so this is a 403 and not
+                        // a 401.
+                        .requestMatchers("/api/donors/me/**", "/api/donors/me").hasRole("DONOR")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(entryPoint))
-                .exceptionHandling(handling -> handling.authenticationEntryPoint(entryPoint))
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(deniedHandler))
+                .exceptionHandling(handling -> handling
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(deniedHandler))
                 .httpBasic(basic -> basic.disable())
                 .formLogin(form -> form.disable())
                 .build();

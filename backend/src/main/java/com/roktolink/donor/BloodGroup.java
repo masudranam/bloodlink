@@ -1,5 +1,8 @@
 package com.roktolink.donor;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * The eight blood groups.
  *
@@ -30,6 +33,7 @@ public enum BloodGroup {
      *
      * @return the three-character-or-less symbol
      */
+    @JsonValue
     public String getSymbol() {
         return symbol;
     }
@@ -41,12 +45,13 @@ public enum BloodGroup {
      * @return the matching constant
      * @throws IllegalArgumentException if no group uses that symbol
      */
+    @JsonCreator
     public static BloodGroup fromSymbol(String symbol) {
         for (BloodGroup group : values()) {
             if (group.symbol.equals(symbol)) {
                 return group;
             }
         }
-        throw new IllegalArgumentException("Not a blood group symbol: " + symbol);
+        throw new IllegalArgumentException("must be one of A+ A- B+ B- AB+ AB- O+ O-");
     }
 }

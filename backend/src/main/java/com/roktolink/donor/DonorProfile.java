@@ -65,6 +65,24 @@ public class DonorProfile {
         // for JPA
     }
 
+    /**
+     * Creates a profile ready to persist.
+     *
+     * @param user             the owning user, who must have the DONOR role
+     * @param bloodGroup       what they can give
+     * @param thana            where they are, to thana granularity and no finer
+     * @param lastDonationDate when they last gave blood, or null if never
+     * @param available        whether they are currently offering to donate
+     */
+    public DonorProfile(AppUser user, BloodGroup bloodGroup, Thana thana,
+                        LocalDate lastDonationDate, boolean available) {
+        this.user = user;
+        this.bloodGroup = bloodGroup;
+        this.thana = thana;
+        this.lastDonationDate = lastDonationDate;
+        this.available = available;
+    }
+
     @PrePersist
     void onCreate() {
         Instant now = Instant.now();
