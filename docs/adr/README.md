@@ -9,3 +9,4 @@ the code, skip it.
 
 - [ADR-0001: Record architecture decisions](ADR-0001-record-architecture-decisions.md)
 - [ADR-0002: Toolchain and build gates](ADR-0002-toolchain-and-build-gates.md)
+- [ADR-0003: A signed JWT rather than a server session](ADR-0003-jwt-over-server-sessions.md)

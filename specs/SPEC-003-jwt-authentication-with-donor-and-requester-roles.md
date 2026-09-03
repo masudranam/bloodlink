@@ -1,6 +1,6 @@
 # SPEC-003: JWT authentication with DONOR and REQUESTER roles
 
-**Status:** Approved
+**Status:** Implemented
 **Issue:** #4 (backlog item 3)
 **Depends on:** SPEC-002
 
@@ -32,6 +32,8 @@ Facebook-group failure mode this project exists to fix.
   the filter chain is demonstrably working.
 - Phone number normalisation, so one person cannot hold two accounts by typing their number two
   different ways.
+- Interactive API docs at `/swagger-ui.html`, with an Authorize button that takes the token from
+  a login response. Approved during implementation; SPEC-010 keeps the polish.
 
 ### Out
 
@@ -174,7 +176,13 @@ Response `200`:
 | ---- | ------ |
 | `POST /api/auth/register`, `POST /api/auth/login` | permit all |
 | `GET /actuator/health` | permit all |
+| `GET /v3/api-docs`, `/v3/api-docs/**`, `/swagger-ui.html`, `/swagger-ui/**` | permit all |
+| `/error` | permit all |
 | everything else under `/api/**` | authenticated |
+
+`/error` has to be permitted. It is the container's error dispatch, and a request that reaches it
+while the chain denies it comes back as a misleading 401 instead of its real status — which is
+exactly what happened with an unparseable role before it was fixed.
 
 **Privacy note:** no endpoint in this spec returns a phone number in any response, success or
 failure. `app_user.phone` is written at registration and read only as a login identifier. The
@@ -249,3 +257,4 @@ com.roktolink.user            AppUserRepository (added to the existing package)
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-03 | Draft | Filled in: scope, ten acceptance criteria, three endpoints, one additive migration. |
 | 2026-09-03 | Approved | Approved on review of PR #14. Coverage blocker settled by testing the auth service; springdoc approved. |
+| 2026-09-03 | Implemented | Three endpoints, V3 migration, springdoc. All ten criteria verified by hand; AC-8's authority mapping is verified by configuration and claims only, pending a role-gated endpoint in SPEC-004. |
