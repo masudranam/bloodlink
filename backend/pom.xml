@@ -11,11 +11,11 @@
     <relativePath/>
   </parent>
 
-  <groupId>com.roktolink</groupId>
-  <artifactId>roktolink-backend</artifactId>
+  <groupId>com.bloodlink</groupId>
+  <artifactId>bloodlink-backend</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>roktolink-backend</name>
-  <description>RoktoLink - privacy-first blood donor network for Bangladesh</description>
+  <name>bloodlink-backend</name>
+  <description>BloodLink - privacy-first blood donor network for Bangladesh</description>
 
   <properties>
     <java.version>21</java.version>
@@ -164,9 +164,9 @@
                 <rule>
                   <element>PACKAGE</element>
                   <includes>
-                    <include>com.roktolink.service</include>
-                    <include>com.roktolink.*.service</include>
-                    <include>com.roktolink.*.*.service</include>
+                    <include>com.bloodlink.service</include>
+                    <include>com.bloodlink.*.service</include>
+                    <include>com.bloodlink.*.*.service</include>
                   </includes>
                   <limits>
                     <limit>

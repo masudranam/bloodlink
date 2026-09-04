@@ -27,7 +27,7 @@ is the same derivation shown forwards, so a donor can see when they become usefu
   enforced by the unique `donor_profile.user_id` from SPEC-002.
 - `isEligible` and `nextEligibleDate` computed on every read, from `lastDonationDate`, the
   configured interval, and today's date in Asia/Dhaka.
-- The interval finally read from `roktolink.eligibility.donation-interval-days`, which has been
+- The interval finally read from `bloodlink.eligibility.donation-interval-days`, which has been
   sitting unused in `application.yml` since SPEC-001.
 - **The first role-gated endpoints in the project.** Everything here requires `ROLE_DONOR`, which
   closes the gap left open by SPEC-003 AC-8, where the authority mapping was configured but
@@ -93,7 +93,7 @@ is the same derivation shown forwards, so a donor can see when they become usefu
 - **AC-8:** A donor who has never recorded a donation — `lastDonationDate` null — is eligible,
   with `nextEligibleDate` null rather than a date in the past.
 
-- **AC-9:** Changing `roktolink.eligibility.donation-interval-days` to 120 and restarting changes
+- **AC-9:** Changing `bloodlink.eligibility.donation-interval-days` to 120 and restarting changes
   `isEligible` and `nextEligibleDate` for the same unmodified row, with no data migration and no
   write. This is the criterion that proves nothing is stored.
 
@@ -233,7 +233,7 @@ only, and AC-11 tests it there.
 ### Configuration
 
 ```yaml
-roktolink:
+bloodlink:
   eligibility:
     donation-interval-days: 90
     zone: Asia/Dhaka
@@ -246,9 +246,9 @@ six hours late.
 ### Java
 
 ```
-com.roktolink.donor            DonorProfileController, request and response records
-com.roktolink.donor.service    DonorProfileService, EligibilityCalculator, EligibilityProperties
-com.roktolink.donor            DonorProfileRepository (added to the existing package)
+com.bloodlink.donor            DonorProfileController, request and response records
+com.bloodlink.donor.service    DonorProfileService, EligibilityCalculator, EligibilityProperties
+com.bloodlink.donor            DonorProfileRepository (added to the existing package)
 ```
 
 `EligibilityCalculator` takes a `Clock` and the interval, and has no other dependencies — the
@@ -263,7 +263,7 @@ serialises as `eligible` by default, so the response record names it explicitly.
 - **Risk — a donor's `lastDonationDate` is self-reported.** Nothing verifies it, so a donor who
   wants to donate too soon can simply lie, and one who forgets to update it stays invisible. The
   alternative is hospital confirmation, which needs an institutional relationship this project
-  does not have. Accepted, and the honest framing is that RoktoLink reduces harm rather than
+  does not have. Accepted, and the honest framing is that BloodLink reduces harm rather than
   eliminating it.
 - **Risk — the interval is one number for everyone.** In practice the safe interval differs by
   sex, weight and donation type. 90 days is the common guidance for whole blood in Bangladesh.

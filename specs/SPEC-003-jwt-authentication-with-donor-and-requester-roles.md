@@ -208,10 +208,10 @@ and `8801XXXXXXXXX`, and normalises before it touches the database.
 ### Configuration
 
 ```yaml
-roktolink:
+bloodlink:
   security:
     jwt:
-      secret: ${ROKTOLINK_JWT_SECRET:<dev-only placeholder, at least 32 bytes>}
+      secret: ${BLOODLINK_JWT_SECRET:<dev-only placeholder, at least 32 bytes>}
       ttl: PT12H
 ```
 
@@ -221,17 +221,17 @@ mid-task, and a longer one widens the window on a stolen token.
 ### Java
 
 ```
-com.roktolink.auth            AuthController, RegisterRequest, LoginRequest, ...
-com.roktolink.auth.service    AuthService — registration, login, normalisation
-com.roktolink.auth.jwt        JwtIssuer, JwtAuthenticationFilter, SecurityConfig
-com.roktolink.user            AppUserRepository (added to the existing package)
+com.bloodlink.auth            AuthController, RegisterRequest, LoginRequest, ...
+com.bloodlink.auth.service    AuthService — registration, login, normalisation
+com.bloodlink.auth.jwt        JwtIssuer, JwtAuthenticationFilter, SecurityConfig
+com.bloodlink.user            AppUserRepository (added to the existing package)
 ```
 
 ## Out of Scope & Risks
 
 - **Blocker — the coverage gate and the "no tests" rule collide here.** `mvn verify` fails the
-  build when a package matching `com.roktolink.*.service` has less than 80% line coverage, and
-  `com.roktolink.auth.service` will match. Under the standing rule that tests are written only
+  build when a package matching `com.bloodlink.*.service` has less than 80% line coverage, and
+  `com.bloodlink.auth.service` will match. Under the standing rule that tests are written only
   for the compatibility matrix, the eligibility date maths and the state machine guards, this
   spec produces no tests and therefore a red build. This must be settled before implementation
   starts; the options are listed in the pull request.
@@ -240,7 +240,7 @@ com.roktolink.user            AppUserRepository (added to the existing package)
   mitigation is that this is a portfolio project rather than a deployed service.
 - **Risk — a symmetric signing key in configuration.** The JWT is signed with an HMAC secret. A
   development placeholder ships in `application.yml`; anything real must set
-  `ROKTOLINK_JWT_SECRET`. A leaked secret mints valid tokens for every account until it is
+  `BLOODLINK_JWT_SECRET`. A leaked secret mints valid tokens for every account until it is
   rotated, and rotation invalidates every live token at once.
 - **Risk — a token cannot be revoked before it expires.** Deleting an account leaves its token
   valid for up to twelve hours. Accepted, and worth revisiting if pledges ever move money or

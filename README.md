@@ -1,4 +1,4 @@
-# RoktoLink
+# BloodLink
 
 A privacy-first blood donor network for Bangladesh.
 
@@ -8,7 +8,7 @@ number stays public forever afterwards. Donors get spam-called for months. Nobod
 records who actually donated, so the same people are asked again while they are
 still ineligible.
 
-RoktoLink is the same exchange with three rules that Facebook cannot give it.
+BloodLink is the same exchange with three rules that Facebook cannot give it.
 
 ---
 
@@ -29,7 +29,7 @@ from a leak.
 ### 2. Eligibility is computed, never stored
 
 A donor is eligible when `lastDonationDate + interval < today`. The interval is
-configuration (`roktolink.eligibility.donation-interval-days`, default 90).
+configuration (`bloodlink.eligibility.donation-interval-days`, default 90).
 
 There is no `is_eligible` column and there never will be one. A stored flag is
 correct on the day it is written and wrong every day after.
@@ -130,13 +130,13 @@ Two consequences worth stating plainly, because both have already bitten:
 docker compose up -d
 ```
 
-Postgres 16 on **`localhost:5433`**, database/user/password all `roktolink`.
+Postgres 16 on **`localhost:5433`**, database/user/password all `bloodlink`.
 
 The host port is 5433 rather than 5432 deliberately: a locally installed
 PostgreSQL usually owns 5432, and on Windows both it and the container can bind
 that port, which sends the application to the wrong server with a confusing
 `password authentication failed` instead of a connection error. Override with
-`ROKTOLINK_DB_PORT` if 5433 is taken as well, and set `ROKTOLINK_DB_URL` to
+`BLOODLINK_DB_PORT` if 5433 is taken as well, and set `BLOODLINK_DB_URL` to
 match.
 
 ```bash
@@ -179,15 +179,15 @@ npm run dev
 
 | Variable | Default | What it does |
 | -------- | ------- | ------------ |
-| `ROKTOLINK_DB_URL` | `jdbc:postgresql://localhost:5433/roktolink` | JDBC url |
-| `ROKTOLINK_DB_USER`, `ROKTOLINK_DB_PASSWORD` | `roktolink` | database credentials |
-| `ROKTOLINK_DB_PORT` | `5433` | host port Docker Compose publishes |
-| `ROKTOLINK_JWT_SECRET` | a placeholder committed to this repo | HMAC key that signs access tokens, at least 32 bytes |
-| `ROKTOLINK_PORT` | `8080` | port the API listens on |
+| `BLOODLINK_DB_URL` | `jdbc:postgresql://localhost:5433/bloodlink` | JDBC url |
+| `BLOODLINK_DB_USER`, `BLOODLINK_DB_PASSWORD` | `bloodlink` | database credentials |
+| `BLOODLINK_DB_PORT` | `5433` | host port Docker Compose publishes |
+| `BLOODLINK_JWT_SECRET` | a placeholder committed to this repo | HMAC key that signs access tokens, at least 32 bytes |
+| `BLOODLINK_PORT` | `8080` | port the API listens on |
 
 The JWT secret shipped in `application.yml` is a development placeholder and is
 not a secret in any meaningful sense — it is in the repository. Anything running
-anywhere real must set `ROKTOLINK_JWT_SECRET`; startup fails if the value is
+anywhere real must set `BLOODLINK_JWT_SECRET`; startup fails if the value is
 shorter than 32 bytes.
 
 ### Windows note
@@ -212,7 +212,7 @@ That one command runs all three gates, in this order:
 | `test` | JUnit 5 + Testcontainers | any test fails |
 | `verify` | Jacoco | service-layer line coverage < 80% |
 
-The coverage rule is scoped to `com.roktolink.*.service` rather than the whole
+The coverage rule is scoped to `com.bloodlink.*.service` rather than the whole
 project, so it measures the code that holds the logic instead of being diluted by
 DTOs and entities. It is a no-op until the first service package exists.
 

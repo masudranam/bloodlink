@@ -40,7 +40,7 @@ without dragging in a Spring context.
   universal plasma recipient — and mixing the two into one service would be exactly the
   invisible error this spec exists to prevent.
 - **Minor antigen systems and crossmatching.** Kell, Duffy, Kidd, antibody screening. Real
-  transfusion medicine does a crossmatch; RoktoLink introduces two people who then go to a
+  transfusion medicine does a crossmatch; BloodLink introduces two people who then go to a
   hospital that does the actual work.
 - **Weak D, partial D, Bombay phenotype** and every other rare case. Eight groups, as specified.
 - **Storing compatibility anywhere.** It is a pure function of its two arguments; a lookup table
@@ -109,12 +109,12 @@ arguments and is computed wherever it is needed.
 ### Java
 
 ```
-com.roktolink.donor.service    BloodCompatibilityService
+com.bloodlink.donor.service    BloodCompatibilityService
 ```
 
 It lives beside `EligibilityCalculator` because both are pure functions over the donor domain,
-and because `BloodGroup` already lives in `com.roktolink.donor`. It matches
-`com.roktolink.*.service`, so the coverage gate applies to it — which for this class should mean
+and because `BloodGroup` already lives in `com.bloodlink.donor`. It matches
+`com.bloodlink.*.service`, so the coverage gate applies to it — which for this class should mean
 100%.
 
 **Implementation shape:** the table is written out explicitly, one line per patient group, as an
@@ -134,7 +134,7 @@ statements of the same rule can be made to agree.
 - **Risk — this is not medical advice.** The service answers a compatibility question about eight
   groups. It does not replace a crossmatch, and a hospital does the real work. Worth keeping in
   the README's framing when SPEC-009 puts this in front of users.
-- **Risk — plasma is inverted.** If RoktoLink ever handles plasma or platelets, the temptation
+- **Risk — plasma is inverted.** If BloodLink ever handles plasma or platelets, the temptation
   will be to add a parameter to this service. That would put two opposite tables behind one
   method name. A separate service, separately tested, is the only safe answer.
 - **Out of scope — caching.** `compatibleDonorsFor` returns a prebuilt immutable set; there is
