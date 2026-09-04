@@ -2,7 +2,7 @@ export default function App() {
   return (
     <main className="shell">
       <header className="shell__header">
-        <h1>RoktoLink</h1>
+        <h1>BloodLink</h1>
         <p className="shell__tagline">A privacy-first blood donor network for Bangladesh.</p>
       </header>
 

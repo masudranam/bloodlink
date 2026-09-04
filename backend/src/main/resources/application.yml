@@ -1,11 +1,11 @@
 spring:
   application:
-    name: roktolink
+    name: bloodlink
 
   datasource:
-    url: ${ROKTOLINK_DB_URL:jdbc:postgresql://localhost:5433/roktolink}
-    username: ${ROKTOLINK_DB_USER:roktolink}
-    password: ${ROKTOLINK_DB_PASSWORD:roktolink}
+    url: ${BLOODLINK_DB_URL:jdbc:postgresql://localhost:5433/bloodlink}
+    username: ${BLOODLINK_DB_USER:bloodlink}
+    password: ${BLOODLINK_DB_PASSWORD:bloodlink}
 
   jpa:
     # Non-negotiable: the schema is owned by Flyway, never by Hibernate.
@@ -23,7 +23,7 @@ spring:
     baseline-on-migrate: false
 
 server:
-  port: ${ROKTOLINK_PORT:8080}
+  port: ${BLOODLINK_PORT:8080}
 
 management:
   endpoints:
@@ -31,13 +31,13 @@ management:
       exposure:
         include: health,info
 
-roktolink:
+bloodlink:
   security:
     jwt:
       # Development placeholder only, and not a secret in any meaningful sense:
-      # it is in the repository. Anything real must set ROKTOLINK_JWT_SECRET.
+      # it is in the repository. Anything real must set BLOODLINK_JWT_SECRET.
       # HS256 needs at least 32 bytes.
-      secret: ${ROKTOLINK_JWT_SECRET:dev-only-insecure-roktolink-signing-key-change-me}
+      secret: ${BLOODLINK_JWT_SECRET:dev-only-insecure-bloodlink-signing-key-change-me}
       # Twelve hours: there is no refresh token, so this is how long a session
       # lasts. Shorter means logging in mid-task; longer widens the window on a
       # stolen token.

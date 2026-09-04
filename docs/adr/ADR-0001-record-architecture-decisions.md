@@ -5,7 +5,7 @@
 
 ## Context
 
-RoktoLink is built spec-first: a spec describes what a feature must do, and its
+BloodLink is built spec-first: a spec describes what a feature must do, and its
 acceptance criteria are traced to tests. Specs are deliberately about behaviour,
 not structure, so they are the wrong place to record *why* a structural choice
 was made — why eligibility is derived rather than stored, why distance is

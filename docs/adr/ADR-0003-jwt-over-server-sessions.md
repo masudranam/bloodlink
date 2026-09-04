@@ -26,7 +26,7 @@ Spring maps to `ROLE_DONOR` or `ROLE_REQUESTER`. It carries no name and no phone
 number: anyone holding a token can read its payload, so it holds nothing worth
 reading.
 
-Signing uses a symmetric secret from `roktolink.security.jwt.secret`, and the
+Signing uses a symmetric secret from `bloodlink.security.jwt.secret`, and the
 token lives twelve hours. There is no refresh token.
 
 ## Consequences

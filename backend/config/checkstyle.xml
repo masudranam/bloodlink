@@ -3,7 +3,7 @@
     "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
     "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <!--
-  RoktoLink Checkstyle ruleset.
+  BloodLink Checkstyle ruleset.
 
   Deliberately small: rules that catch real mistakes, not formatting taste.
   Every violation is severity=error and fails the build (see pom.xml,

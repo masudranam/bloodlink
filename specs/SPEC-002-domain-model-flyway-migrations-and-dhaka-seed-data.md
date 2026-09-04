@@ -45,7 +45,7 @@ SPEC-007 cannot be demonstrated or tested against anything believable.
   and nothing that writes to it.
 - **Seeded users or donors.** No `app_user` or `donor_profile` rows are inserted. Demo data for
   exercising search belongs with SPEC-007, where there is something to search with.
-- **An `email` column.** RoktoLink identifies people by phone number, and email notification is
+- **An `email` column.** BloodLink identifies people by phone number, and email notification is
   out of scope for the whole project, so an email column would be dead weight.
 
 ## Acceptance Criteria
@@ -175,9 +175,9 @@ Hospitals seeded, each with its own coordinates and a `thana_id`:
 One package per bounded area:
 
 ```
-com.roktolink.reference   Thana, Hospital
-com.roktolink.user        AppUser, UserRole
-com.roktolink.donor       DonorProfile, BloodGroup, BloodGroupConverter
+com.bloodlink.reference   Thana, Hospital
+com.bloodlink.user        AppUser, UserRole
+com.bloodlink.donor       DonorProfile, BloodGroup, BloodGroupConverter
 ```
 
 `BloodGroup` constants are `A_POSITIVE`, `A_NEGATIVE` and so on, because `+` is not legal in a

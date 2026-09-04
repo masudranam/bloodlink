@@ -25,7 +25,7 @@ all, while the target runtime is Java 21.
   It checks `src/main/java` only: the traceability convention requires test
   methods named `ac3_...`, which the `MethodName` rule would reject.
 - **Jacoco's coverage gate is scoped to the service layer**, as a `PACKAGE` rule
-  matching `com.roktolink.*.service`, checked in `verify` with
+  matching `com.bloodlink.*.service`, checked in `verify` with
   `haltOnFailure=true`. A rule matching no package is a no-op, so the gate is
   silent on the skeleton and starts biting the moment a service exists.
 - **Testcontainers, not an embedded database.** Tests run against

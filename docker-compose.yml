@@ -1,27 +1,27 @@
-# Local infrastructure for RoktoLink. Postgres only, by design:
+# Local infrastructure for BloodLink. Postgres only, by design:
 # the backend and frontend are run from your shell so you get fast reloads,
 # and CI uses Testcontainers rather than this file.
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: roktolink-postgres
+    container_name: bloodlink-postgres
     environment:
-      POSTGRES_DB: roktolink
-      POSTGRES_USER: roktolink
-      POSTGRES_PASSWORD: roktolink
+      POSTGRES_DB: bloodlink
+      POSTGRES_USER: bloodlink
+      POSTGRES_PASSWORD: bloodlink
     ports:
       # 5433 on the host on purpose: a locally installed PostgreSQL usually owns
       # 5432, and on Windows both can bind it, which silently sends the app to
-      # the wrong server. Override with ROKTOLINK_DB_PORT if 5433 is taken too.
-      - "${ROKTOLINK_DB_PORT:-5433}:5432"
+      # the wrong server. Override with BLOODLINK_DB_PORT if 5433 is taken too.
+      - "${BLOODLINK_DB_PORT:-5433}:5432"
     volumes:
-      - roktolink-pgdata:/var/lib/postgresql/data
+      - bloodlink-pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U roktolink -d roktolink"]
+      test: ["CMD-SHELL", "pg_isready -U bloodlink -d bloodlink"]
       interval: 5s
       timeout: 5s
       retries: 10
     restart: unless-stopped
 
 volumes:
-  roktolink-pgdata:
+  bloodlink-pgdata:

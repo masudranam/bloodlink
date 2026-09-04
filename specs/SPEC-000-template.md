@@ -11,7 +11,7 @@
 
 ## Problem
 
-What is broken or missing today, in terms of the people using RoktoLink — a
+What is broken or missing today, in terms of the people using BloodLink — a
 requester at 2am, a donor who has been called six times this month. Two or three
 paragraphs. No solution here.
 
