@@ -1,6 +1,6 @@
 # SPEC-006: Blood request lifecycle and transition guards
 
-**Status:** Draft
+**Status:** Approved
 **Issue:** #7 (backlog item 6)
 **Depends on:** SPEC-003
 
@@ -253,3 +253,4 @@ exhaustively, and that is only cheap when the thing under test needs nothing to 
 | ---- | ------ | ---- |
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-04 | Draft | Filled in: thirteen acceptance criteria, five endpoints, one migration, the 5x5 transition table. |
+| 2026-09-04 | Approved | Approved on review of PR #22. |
