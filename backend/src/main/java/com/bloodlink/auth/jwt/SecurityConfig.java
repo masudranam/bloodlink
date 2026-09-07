@@ -75,6 +75,14 @@ public class SecurityConfig {
                         // REQUESTER token is somebody, so this is a 403 and not
                         // a 401.
                         .requestMatchers("/api/donors/me/**", "/api/donors/me").hasRole("DONOR")
+                        // SPEC-006. Raising a request and moving one through its
+                        // lifecycle are a requester's job; reading the feed is
+                        // open to both roles, because a donor browsing it is the
+                        // entire point.
+                        .requestMatchers(HttpMethod.POST, "/api/requests").hasRole("REQUESTER")
+                        .requestMatchers(HttpMethod.POST, "/api/requests/*/cancel", "/api/requests/*/fulfil")
+                            .hasRole("REQUESTER")
+                        .requestMatchers(HttpMethod.GET, "/api/requests", "/api/requests/*").authenticated()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))

@@ -1,6 +1,6 @@
 # SPEC-006: Blood request lifecycle and transition guards
 
-**Status:** Approved
+**Status:** Implemented
 **Issue:** #7 (backlog item 6)
 **Depends on:** SPEC-003
 
@@ -254,3 +254,4 @@ exhaustively, and that is only cheap when the thing under test needs nothing to 
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-04 | Draft | Filled in: thirteen acceptance criteria, five endpoints, one migration, the 5x5 transition table. |
 | 2026-09-04 | Approved | Approved on review of PR #22. |
+| 2026-09-07 | Implemented | Five endpoints, V4, 59 tests. AC-10 and AC-12 are test-verified only: no endpoint drives PLEDGED or EXPIRED in this spec. |
