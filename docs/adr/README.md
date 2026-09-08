@@ -10,3 +10,5 @@ the code, skip it.
 - [ADR-0001: Record architecture decisions](ADR-0001-record-architecture-decisions.md)
 - [ADR-0002: Toolchain and build gates](ADR-0002-toolchain-and-build-gates.md)
 - [ADR-0003: A signed JWT rather than a server session](ADR-0003-jwt-over-server-sessions.md)
+- [ADR-0004: A donor's location is their thana centroid](ADR-0004-donor-location-is-the-thana-centroid.md)
+- [ADR-0005: Haversine in native SQL](ADR-0005-haversine-in-native-sql.md)

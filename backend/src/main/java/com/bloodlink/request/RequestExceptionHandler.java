@@ -3,6 +3,7 @@ package com.bloodlink.request;
 import com.bloodlink.request.service.IllegalTransitionException;
 import com.bloodlink.request.service.InvalidRequestException;
 import com.bloodlink.request.service.NotTheRequesterException;
+import com.bloodlink.request.service.RequestNotActiveException;
 import com.bloodlink.request.service.RequestNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -47,6 +48,23 @@ public class RequestExceptionHandler {
     @ExceptionHandler(NotTheRequesterException.class)
     ProblemDetail onNotTheRequester(NotTheRequesterException exception) {
         return problem(HttpStatus.FORBIDDEN, exception.getMessage(), "not-the-requester");
+    }
+
+    /**
+     * A request that is over.
+     *
+     * <p>409 for the same reason a refused transition is: the caller is allowed
+     * and the body is fine, the request has simply finished. Distinguished from
+     * an illegal transition by its own problem type, because a client showing a
+     * search screen wants to react differently to "that request is closed" than
+     * to "that move is not allowed".
+     *
+     * @param exception the finished request
+     * @return 409 naming the terminal status
+     */
+    @ExceptionHandler(RequestNotActiveException.class)
+    ProblemDetail onRequestNotActive(RequestNotActiveException exception) {
+        return problem(HttpStatus.CONFLICT, exception.getMessage(), "request-not-active");
     }
 
     @ExceptionHandler(RequestNotFoundException.class)
