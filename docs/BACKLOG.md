@@ -50,7 +50,7 @@ Issue 5 is the only one that can be built in parallel with the 2 → 3 → 4 cha
 | 7 | Implemented | The core query: four filters in one native statement, Haversine ranking, three sort keys so paging is stable, projected without a phone field. |
 | 8 | Implemented | The privacy rule: pledge, accept, and one audited endpoint that reveals a phone number. Append-only reveal log, readable by the person whose number it is. |
 | 9 | Implemented | Nine routes, both roles, no new dependencies. The reveal sits behind a press so opening a page writes no audit row. |
-| 10 | Draft | |
+| 10 | Implemented | Expiry through the state machine, a correlation id on every line and response, no phone number in any log, and a document that proves the privacy rule. |
 
 ## Explicitly not on this backlog
 

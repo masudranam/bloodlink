@@ -43,6 +43,15 @@ bloodlink:
       # stolen token.
       ttl: PT12H
 
+  expiry:
+    # A request past its date leaves the feed without anybody remembering to do
+    # it. Off means the job bean is never created, so nothing is scheduled
+    # rather than scheduled and skipped.
+    enabled: ${BLOODLINK_EXPIRY_ENABLED:true}
+    # Six-field Spring cron: five past every hour. Config-driven so the cadence
+    # can change without a deployment.
+    cron: ${BLOODLINK_EXPIRY_CRON:0 5 * * * *}
+
   eligibility:
     # Pillar 2: eligibility is COMPUTED from this interval, never stored.
     donation-interval-days: 90
@@ -54,7 +63,14 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
 
 logging:
   level:
     org.flywaydb: INFO
+    # Every log line carries the correlation id from CorrelationIdFilter. See
+    # logback-spring.xml for the pattern; there is deliberately no scrubbing
+    # layer, because nothing logs a phone number in the first place.
+    com.bloodlink: ${BLOODLINK_LOG_LEVEL:INFO}

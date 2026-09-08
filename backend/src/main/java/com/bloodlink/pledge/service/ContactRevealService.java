@@ -11,6 +11,8 @@ import com.bloodlink.pledge.RevealResponse;
 import com.bloodlink.pledge.ViewerSummary;
 import com.bloodlink.request.PageResponse;
 import com.bloodlink.user.AppUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class ContactRevealService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ContactRevealService.class);
 
     private final PledgeRepository pledges;
     private final ContactRevealRepository reveals;
@@ -89,6 +93,15 @@ public class ContactRevealService {
                 viewer.getFullName(),
                 viewer.getRole(),
                 counterparty.getId()));
+
+        // Ids and roles, never the number. The log records that a reveal
+        // happened; the database records what was revealed. Putting the digits
+        // here would undo the whole design in one line, in a file nobody audits
+        // as carefully as the API.
+        LOG.info("event=contact_revealed pledgeId={} requestId={} viewerUserId={} viewerRole={} "
+                        + "revealedUserId={} revealId={}",
+                pledge.getId(), pledge.getRequest().getId(), viewer.getId(), viewer.getRole(),
+                counterparty.getId(), audit.getId());
 
         return new ContactResponse(
                 pledge.getId(),

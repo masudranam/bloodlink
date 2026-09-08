@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  BloodLink logging.
+
+  Structured means consistent key=value fields inside the message, not JSON. A
+  JSON encoder would need a new dependency and would make the one place these
+  logs are actually read - a terminal, by a person - harder to read. The
+  correlation id is a first-class column so that grepping for one request is
+  obvious.
+
+  There is deliberately no scrubbing or masking layer. The rule is that nothing
+  logs a phone number, which leaves nothing to scrub and no redaction setting to
+  forget. SPEC-010 AC-11 verifies it against captured output rather than trusting
+  this comment.
+-->
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+  <!-- [correlationId] sits between the thread and the logger name. A blank one
+       means the line came from somewhere with no HTTP request behind it, which
+       for this application means the scheduler or startup. -->
+  <property name="BLOODLINK_PATTERN"
+            value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{correlationId:--------}] [%t] %-40.40logger{39} : %m%n%wEx"/>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${BLOODLINK_PATTERN}</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+  <logger name="com.bloodlink" level="INFO"/>
+</configuration>
