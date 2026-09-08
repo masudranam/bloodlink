@@ -82,6 +82,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/requests").hasRole("REQUESTER")
                         .requestMatchers(HttpMethod.POST, "/api/requests/*/cancel", "/api/requests/*/fulfil")
                             .hasRole("REQUESTER")
+                        // SPEC-007: searching for donors is a requester's job,
+                        // and only against their own request. The role gate is
+                        // here; the ownership check is in the service, because
+                        // a URL pattern cannot express "yours".
+                        .requestMatchers(HttpMethod.GET, "/api/requests/*/donors").hasRole("REQUESTER")
                         .requestMatchers(HttpMethod.GET, "/api/requests", "/api/requests/*").authenticated()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2

@@ -164,6 +164,39 @@ public class BloodRequestService {
         return toResponse(requests.save(request));
     }
 
+    /**
+     * The request behind a donor search: it must exist, belong to the caller, and
+     * still be live.
+     *
+     * <p>Returns the entity rather than a response, because the caller
+     * (SPEC-007) needs the hospital's coordinates and the patient's group, and
+     * neither belongs in a client-facing DTO. It lives here so that ownership is
+     * decided in one place: a search that grew its own check would be free to
+     * disagree with cancel and fulfil.
+     *
+     * <p>Ownership is checked before liveness, the same order as
+     * {@link #transitionOwn}: a stranger gets 403 whatever state the request is
+     * in, so an error cannot tell them what state somebody else's request is in.
+     *
+     * @param requesterId the authenticated requester
+     * @param id          the request id
+     * @return the live request they raised
+     * @throws RequestNotFoundException  if no such request exists
+     * @throws NotTheRequesterException  if somebody else raised it
+     * @throws RequestNotActiveException if it has reached a terminal status
+     */
+    @Transactional(readOnly = true)
+    public BloodRequest requireActiveAndOwnedBy(long requesterId, long id) {
+        BloodRequest request = require(id);
+        if (!request.getRequester().getId().equals(requesterId)) {
+            throw new NotTheRequesterException();
+        }
+        if (request.getStatus().isTerminal()) {
+            throw new RequestNotActiveException(request.getStatus());
+        }
+        return request;
+    }
+
     private BloodRequestResponse transitionOwn(long requesterId, long id, BloodRequestStatus target) {
         BloodRequest request = require(id);
         if (!request.getRequester().getId().equals(requesterId)) {

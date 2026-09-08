@@ -1,6 +1,6 @@
 # SPEC-007: Donor search: compatible, eligible, within N km
 
-**Status:** Draft
+**Status:** Implemented
 **Issue:** #11 (backlog item 7)
 **Depends on:** SPEC-004, SPEC-005, SPEC-006
 
@@ -77,9 +77,15 @@ change could quietly widen.
   nulls first (the longest-rested donor of a tied thana comes first), then by donor id. Reading
   the same result set as two pages of size 1 returns two different donors, and never repeats or
   skips one.
-- **AC-9:** `distanceKm` is the Haversine distance in kilometres rounded to one decimal. For a
-  donor whose thana is the hospital's own thana the value is `0.0`, and for a known pair of Dhaka
-  thanas it matches a hand-computed distance to within 0.1 km.
+- **AC-9:** `distanceKm` is the Haversine distance in kilometres rounded to one decimal, and it
+  matches an independently hand-computed Haversine distance to within 0.1 km for every thana in
+  the fixture.
+  > **Corrected 2026-09-08, during implementation.** As merged, this criterion also claimed the
+  > value would be `0.0` "for a donor whose thana is the hospital's own thana". That is wrong: a
+  > hospital carries its own coordinates rather than inheriting its thana's centroid (ADR-0004),
+  > so a Chawkbazar donor is 0.9 km from Dhaka Medical College, which is in Chawkbazar. The
+  > clause was a mistaken example, not a requirement on the code, and no behaviour changed. It is
+  > struck rather than silently edited.
 - **AC-10:** `page` below 0, `size` above 100, `radiusKm` below 1 and `radiusKm` above 50 each
   return `400` with an `errors` map naming the parameter.
 - **AC-11:** A `DONOR` token gets `403`; no token gets `401`.
@@ -117,7 +123,7 @@ Response `200`:
       "fullName": "Rahim Uddin",
       "bloodGroup": "O-",
       "thana": { "id": 7, "name": "Chawkbazar", "district": "Dhaka" },
-      "distanceKm": 0.0,
+      "distanceKm": 0.9,
       "lastDonationDate": null,
       "nextEligibleDate": null
     },
@@ -216,3 +222,4 @@ Nothing is stored by a search. It is a read, and its results are computed from t
 | ---- | ------ | ---- |
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-08 | Draft | Filled in: four filters, one query, no migration, two ADRs. |
+| 2026-09-08 | Implemented | All 15 criteria verified; AC-9's `0.0` example corrected in place, see the note there. |

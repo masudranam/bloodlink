@@ -47,7 +47,7 @@ Issue 5 is the only one that can be built in parallel with the 2 → 3 → 4 cha
 | 4 | Implemented | Donor profile CRUD with isEligible and nextEligibleDate computed on every read. |
 | 5 | Implemented | Dependency-free service, 8x8 table asserted exhaustively and cross-checked against antigen rules. |
 | 6 | Implemented | Request lifecycle with a dependency-free state machine; 7 of 25 transitions legal, the rest refused. |
-| 7 | Draft | |
+| 7 | Implemented | The core query: four filters in one native statement, Haversine ranking, three sort keys so paging is stable, projected without a phone field. |
 | 8 | Draft | |
 | 9 | Draft | |
 | 10 | Draft | |
