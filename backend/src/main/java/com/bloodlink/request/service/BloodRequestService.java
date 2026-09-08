@@ -187,14 +187,55 @@ public class BloodRequestService {
      */
     @Transactional(readOnly = true)
     public BloodRequest requireActiveAndOwnedBy(long requesterId, long id) {
+        BloodRequest request = requireOwnedBy(requesterId, id);
+        requireNotTerminal(request);
+        return request;
+    }
+
+    /**
+     * The request behind an action by its owner, live or not.
+     *
+     * <p>Separate from {@link #requireActiveAndOwnedBy} because listing the
+     * pledges on a request one cancelled last week is a perfectly reasonable
+     * thing to do (SPEC-008), while searching for donors for it is not.
+     *
+     * @param requesterId the authenticated requester
+     * @param id          the request id
+     * @return the request they raised
+     * @throws RequestNotFoundException if no such request exists
+     * @throws NotTheRequesterException if somebody else raised it
+     */
+    @Transactional(readOnly = true)
+    public BloodRequest requireOwnedBy(long requesterId, long id) {
         BloodRequest request = require(id);
         if (!request.getRequester().getId().equals(requesterId)) {
             throw new NotTheRequesterException();
         }
+        return request;
+    }
+
+    /**
+     * A live request, for a caller who is not its owner.
+     *
+     * <p>A donor pledging (SPEC-008) has no ownership to check but must still be
+     * stopped from offering blood for a request that is over.
+     *
+     * @param id the request id
+     * @return the live request
+     * @throws RequestNotFoundException  if no such request exists
+     * @throws RequestNotActiveException if it has reached a terminal status
+     */
+    @Transactional(readOnly = true)
+    public BloodRequest requireActive(long id) {
+        BloodRequest request = require(id);
+        requireNotTerminal(request);
+        return request;
+    }
+
+    private void requireNotTerminal(BloodRequest request) {
         if (request.getStatus().isTerminal()) {
             throw new RequestNotActiveException(request.getStatus());
         }
-        return request;
     }
 
     private BloodRequestResponse transitionOwn(long requesterId, long id, BloodRequestStatus target) {

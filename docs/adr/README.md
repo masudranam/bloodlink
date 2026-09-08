@@ -12,3 +12,5 @@ the code, skip it.
 - [ADR-0003: A signed JWT rather than a server session](ADR-0003-jwt-over-server-sessions.md)
 - [ADR-0004: A donor's location is their thana centroid](ADR-0004-donor-location-is-the-thana-centroid.md)
 - [ADR-0005: Haversine in native SQL](ADR-0005-haversine-in-native-sql.md)
+- [ADR-0006: The contact reveal log is append-only and carries no foreign keys](ADR-0006-append-only-audit-log-without-foreign-keys.md)
+- [ADR-0007: The reveal is a separate audited endpoint](ADR-0007-the-reveal-is-a-separate-audited-endpoint.md)
