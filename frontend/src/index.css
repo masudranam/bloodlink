@@ -1,3 +1,11 @@
+/*
+ * One stylesheet, plain CSS, no UI kit.
+ *
+ * Mobile-first single column: the person using this is on a phone at a hospital
+ * with one hand free. Everything is legible at arm's length, tap targets are
+ * finger-sized, and nothing animates.
+ */
+
 :root {
   --ink: #17151a;
   --ink-soft: #5d5866;
@@ -5,6 +13,9 @@
   --card: #ffffff;
   --line: #e6e1dd;
   --blood: #a8202c;
+  --blood-dark: #7e1821;
+  --good: #1f6f43;
+  --live: #8a5a00;
 
   color-scheme: light;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -25,37 +36,74 @@ body {
 .shell {
   max-width: 46rem;
   margin: 0 auto;
-  padding: 3rem 1.25rem 4rem;
+  padding: 2rem 1rem 3rem;
 }
 
 .shell__header {
   border-bottom: 1px solid var(--line);
-  padding-bottom: 1.25rem;
-  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .shell__header h1 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.7rem;
   letter-spacing: -0.02em;
+}
+
+.shell__header h1 a {
   color: var(--blood);
+  text-decoration: none;
 }
 
 .shell__tagline {
-  margin: 0.35rem 0 0;
+  margin: 0.2rem 0 0;
   color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.shell__footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin-top: 1rem;
+}
+
+.nav__link {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav__link:hover {
+  color: var(--ink);
+}
+
+.nav__link--current {
+  color: var(--blood);
+  border-bottom-color: var(--blood);
 }
 
 .card {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1.25rem;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.1rem;
 }
 
 .card h2 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.6rem;
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -63,16 +111,342 @@ body {
 }
 
 .card p {
-  margin: 0;
+  margin: 0 0 0.5rem;
 }
 
-.rules {
-  margin: 0;
-  padding-left: 1.25rem;
+.card p:last-child {
+  margin-bottom: 0;
 }
 
-.rules li + li {
+.muted {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+/* ---------- rows and lists ---------- */
+
+.row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.row--spread {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.row--actions {
   margin-top: 0.6rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.list__row:first-child {
+  border-top: 0;
+}
+
+.list__main {
+  min-width: 0;
+}
+
+.list__title {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+a.list__title:hover {
+  color: var(--blood);
+}
+
+.list__meta {
+  margin: 0.15rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.list__note {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+}
+
+/* ---------- status ---------- */
+
+.pill {
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  background: var(--paper);
+  white-space: nowrap;
+}
+
+.pill--live {
+  color: var(--live);
+  border-color: #e8d5a8;
+  background: #fdf6e6;
+}
+
+.pill--good {
+  color: var(--good);
+  border-color: #bfe0cc;
+  background: #eef8f2;
+}
+
+.pill--done {
+  color: #2d4a86;
+  border-color: #c6d3ee;
+  background: #eef2fb;
+}
+
+/* ---------- forms ---------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin: 0.75rem 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.field--radios {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.field__label {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.field__error {
+  font-size: 0.82rem;
+  color: var(--blood);
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 0.55rem 0.6rem;
+  width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--blood);
+  outline-offset: 1px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.radio,
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+
+.radio input,
+.checkbox input {
+  width: auto;
+}
+
+.inline-field {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.inline-field select {
+  width: auto;
+}
+
+.button {
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--blood);
+  border: 1px solid var(--blood);
+  border-radius: 7px;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  min-height: 2.6rem;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--blood-dark);
+  border-color: var(--blood-dark);
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.button--quiet {
+  color: var(--ink);
+  background: var(--card);
+  border-color: var(--line);
+}
+
+.button--quiet:hover:not(:disabled) {
+  background: var(--paper);
+  border-color: var(--ink-soft);
+}
+
+/* ---------- states ---------- */
+
+.state {
+  margin: 0.5rem 0;
+  font-size: 0.92rem;
+}
+
+.state--loading,
+.state--empty {
+  color: var(--ink-soft);
+}
+
+.state--error {
+  color: var(--blood);
+  background: #fdf1f2;
+  border: 1px solid #f0d3d6;
+  border-radius: 7px;
+  padding: 0.5rem 0.7rem;
+}
+
+.verdict {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.verdict--yes {
+  color: var(--good);
+}
+
+.verdict--no {
+  color: var(--blood);
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.pager button {
+  font: inherit;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+.pager button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.pager__count {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- the reveal ---------- */
+
+/*
+ * Deliberately not styled as a hidden value waiting to be shown. Before the
+ * press there is no number on this device, and the panel should read that way:
+ * an explanation and an action, not a blurred field with a padlock.
+ */
+.contact {
+  margin: 0.6rem 0 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.contact--revealed {
+  border-style: solid;
+  border-color: #bfe0cc;
+  background: #f4fbf7;
+}
+
+.contact__note {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.contact--revealed .contact__note {
+  margin: 0.35rem 0 0;
+}
+
+.contact__name {
+  margin: 0;
+  font-weight: 600;
+}
+
+.contact__role {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.contact__phone {
+  margin: 0.15rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.contact__phone a {
+  color: var(--blood);
+  text-decoration: none;
+}
+
+.button--reveal {
+  width: 100%;
 }
 
 code {
@@ -81,4 +455,14 @@ code {
   background: #f3efec;
   border-radius: 4px;
   padding: 0.1em 0.35em;
+}
+
+@media (min-width: 34rem) {
+  .shell {
+    padding: 3rem 1.25rem 4rem;
+  }
+
+  .button--reveal {
+    width: auto;
+  }
 }

@@ -1,6 +1,6 @@
 # SPEC-009: React client: auth, feed, search and pledge flow
 
-**Status:** Draft
+**Status:** Implemented
 **Issue:** #9 (backlog item 9)
 **Depends on:** SPEC-008
 
@@ -148,8 +148,14 @@ looked at — the log would fill with reveals that never happened in any meaning
 
 ## Data Model Changes
 
-None. This spec adds no endpoint and no migration; it consumes SPEC-003 through SPEC-008 exactly
-as merged.
+No migration.
+
+> **Two endpoints were added during implementation, and this is the disclosure rather than a
+> quiet expansion.** `GET /api/thanas` and `GET /api/hospitals` did not exist. SPEC-004 takes a
+> `thanaId` and SPEC-006 takes a `hospitalId`, and nothing exposed either list, so the only
+> client this spec could have produced would have had a number box labelled "hospital id". Both
+> are read-only lists over data that has been in `V2` since SPEC-002, both are authenticated, and
+> neither can carry a phone number or coordinates. Nothing else about the API changed.
 
 ## Out of Scope & Risks
 
@@ -180,3 +186,4 @@ as merged.
 | ---- | ------ | ---- |
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-08 | Draft | Filled in: nine routes, no new dependencies, the reveal behind a press. |
+| 2026-09-08 | Implemented | All 18 criteria verified against rendered DOM. Two reference endpoints added and disclosed above. |

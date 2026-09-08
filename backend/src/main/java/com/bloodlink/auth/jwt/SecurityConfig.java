@@ -103,6 +103,11 @@ public class SecurityConfig {
                         // can answer.
                         .requestMatchers(HttpMethod.GET, "/api/pledges/*/contact").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/me/reveals").authenticated()
+                        // Reference data: places, not people. Authenticated
+                        // rather than public because nothing in this project is
+                        // readable without a token, and a client only needs these
+                        // lists once it has one.
+                        .requestMatchers(HttpMethod.GET, "/api/thanas", "/api/hospitals").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/requests", "/api/requests/*").authenticated()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
