@@ -1,6 +1,6 @@
 # SPEC-008: Pledge, accept, contact reveal and audit log
 
-**Status:** Draft
+**Status:** Implemented
 **Issue:** #8 (backlog item 8)
 **Depends on:** SPEC-007
 
@@ -298,3 +298,4 @@ costume.
 | ---- | ------ | ---- |
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-08 | Draft | Filled in: eight endpoints, two tables, one place a phone number may appear. |
+| 2026-09-08 | Implemented | All 20 criteria verified. Audit rows observed outliving deleted users, as ADR-0006 intends. |

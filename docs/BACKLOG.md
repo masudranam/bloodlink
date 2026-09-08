@@ -48,7 +48,7 @@ Issue 5 is the only one that can be built in parallel with the 2 → 3 → 4 cha
 | 5 | Implemented | Dependency-free service, 8x8 table asserted exhaustively and cross-checked against antigen rules. |
 | 6 | Implemented | Request lifecycle with a dependency-free state machine; 7 of 25 transitions legal, the rest refused. |
 | 7 | Implemented | The core query: four filters in one native statement, Haversine ranking, three sort keys so paging is stable, projected without a phone field. |
-| 8 | Draft | |
+| 8 | Implemented | The privacy rule: pledge, accept, and one audited endpoint that reveals a phone number. Append-only reveal log, readable by the person whose number it is. |
 | 9 | Draft | |
 | 10 | Draft | |
 

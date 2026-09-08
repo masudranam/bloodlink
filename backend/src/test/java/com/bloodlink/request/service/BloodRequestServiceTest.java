@@ -256,6 +256,67 @@ class BloodRequestServiceTest {
                 .noneMatch(component -> component.getName().toLowerCase().contains("phone"));
     }
 
+    // ---------- the guards other specs lean on (SPEC-007, SPEC-008) ----------
+
+    @Test
+    void requireActive_returnsALiveRequestToACallerWhoDoesNotOwnIt() {
+        BloodRequest request = requestOwnedBy(REQUESTER_ID, BloodRequestStatus.OPEN);
+        when(requests.findById(REQUEST_ID)).thenReturn(Optional.of(request));
+
+        assertThat(service.requireActive(REQUEST_ID))
+                .as("a donor pledging has no ownership to check")
+                .isSameAs(request);
+    }
+
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.EnumSource(
+            value = BloodRequestStatus.class, names = {"FULFILLED", "CANCELLED", "EXPIRED"})
+    void requireActive_refusesARequestThatIsOver(BloodRequestStatus terminal) {
+        when(requests.findById(REQUEST_ID))
+                .thenReturn(Optional.of(requestOwnedBy(REQUESTER_ID, terminal)));
+
+        assertThatThrownBy(() -> service.requireActive(REQUEST_ID))
+                .isInstanceOf(RequestNotActiveException.class)
+                .hasMessage("A request that is " + terminal + " is no longer looking for donors");
+    }
+
+    @Test
+    void requireActive_failsForARequestThatDoesNotExist() {
+        when(requests.findById(REQUEST_ID)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.requireActive(REQUEST_ID))
+                .isInstanceOf(RequestNotFoundException.class);
+    }
+
+    @Test
+    void requireOwnedBy_ignoresTheStatusEntirely() {
+        BloodRequest cancelled = requestOwnedBy(REQUESTER_ID, BloodRequestStatus.CANCELLED);
+        when(requests.findById(REQUEST_ID)).thenReturn(Optional.of(cancelled));
+
+        assertThat(service.requireOwnedBy(REQUESTER_ID, REQUEST_ID))
+                .as("reading the pledges on a request you cancelled last week is reasonable")
+                .isSameAs(cancelled);
+    }
+
+    @Test
+    void requireOwnedBy_refusesSomebodyElsesRequest() {
+        when(requests.findById(REQUEST_ID))
+                .thenReturn(Optional.of(requestOwnedBy(REQUESTER_ID, BloodRequestStatus.OPEN)));
+
+        assertThatThrownBy(() -> service.requireOwnedBy(SOMEONE_ELSE_ID, REQUEST_ID))
+                .isInstanceOf(NotTheRequesterException.class);
+    }
+
+    @Test
+    void requireActiveAndOwnedBy_checksOwnershipBeforeLiveness() {
+        when(requests.findById(REQUEST_ID))
+                .thenReturn(Optional.of(requestOwnedBy(REQUESTER_ID, BloodRequestStatus.CANCELLED)));
+
+        assertThatThrownBy(() -> service.requireActiveAndOwnedBy(SOMEONE_ELSE_ID, REQUEST_ID))
+                .as("403 before 409, so an error cannot report on somebody else's request")
+                .isInstanceOf(NotTheRequesterException.class);
+    }
+
     // ---------- fixtures ----------
 
     private AppUser requester(long id) {

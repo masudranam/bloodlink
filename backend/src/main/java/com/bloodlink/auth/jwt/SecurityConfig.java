@@ -87,6 +87,22 @@ public class SecurityConfig {
                         // here; the ownership check is in the service, because
                         // a URL pattern cannot express "yours".
                         .requestMatchers(HttpMethod.GET, "/api/requests/*/donors").hasRole("REQUESTER")
+                        // SPEC-008. Offering blood is a donor's act and answering
+                        // an offer is a requester's; withdrawing is the donor's
+                        // own word about their own intention, so a requester is
+                        // gated out of it here rather than in the service.
+                        .requestMatchers(HttpMethod.POST, "/api/requests/*/pledges").hasRole("DONOR")
+                        .requestMatchers(HttpMethod.GET, "/api/requests/*/pledges").hasRole("REQUESTER")
+                        .requestMatchers(HttpMethod.POST, "/api/pledges/*/accept", "/api/pledges/*/decline")
+                            .hasRole("REQUESTER")
+                        .requestMatchers(HttpMethod.POST, "/api/pledges/*/withdraw").hasRole("DONOR")
+                        // The reveal and the reveal log are open to both roles:
+                        // a requester's number is revealed to a donor exactly as
+                        // a donor's is to a requester, and both may audit it. Who
+                        // is party to which pledge is a question only the service
+                        // can answer.
+                        .requestMatchers(HttpMethod.GET, "/api/pledges/*/contact").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/me/reveals").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/requests", "/api/requests/*").authenticated()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
