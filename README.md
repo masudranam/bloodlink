@@ -184,6 +184,9 @@ npm run dev
 | `BLOODLINK_DB_PORT` | `5433` | host port Docker Compose publishes |
 | `BLOODLINK_JWT_SECRET` | a placeholder committed to this repo | HMAC key that signs access tokens, at least 32 bytes |
 | `BLOODLINK_PORT` | `8080` | port the API listens on |
+| `BLOODLINK_EXPIRY_ENABLED` | `true` | `false` means the expiry job bean is never created, so nothing is scheduled |
+| `BLOODLINK_EXPIRY_CRON` | `0 5 * * * *` | six-field Spring cron for the expiry job |
+| `BLOODLINK_LOG_LEVEL` | `INFO` | log level for `com.bloodlink` |
 
 The JWT secret shipped in `application.yml` is a development placeholder and is
 not a secret in any meaningful sense — it is in the repository. Anything running
@@ -233,11 +236,83 @@ every pull request: `./mvnw verify` on Temurin 21 with Testcontainers, then
 
 ---
 
+## The API
+
+Interactive docs while the app is running: **<http://localhost:8080/swagger-ui.html>**
+(the raw document is at `/v3/api-docs`). Sign in with `POST /api/auth/login`, then
+paste the `accessToken` into **Authorize**.
+
+| Method | Path | Who | What |
+| ------ | ---- | --- | ---- |
+| POST | `/api/auth/register` | public | create an account as `DONOR` or `REQUESTER` |
+| POST | `/api/auth/login` | public | exchange phone and password for a 12-hour JWT |
+| GET | `/api/auth/me` | any | who the token belongs to |
+| GET | `/api/thanas` | any | the 40 seeded thanas, for a form |
+| GET | `/api/hospitals` | any | the seeded hospitals, for a form |
+| POST | `/api/donors/me` | donor | create a donor profile |
+| GET | `/api/donors/me` | donor | read it, with `isEligible` computed on the spot |
+| PUT | `/api/donors/me` | donor | replace it |
+| DELETE | `/api/donors/me` | donor | delete it |
+| POST | `/api/requests` | requester | raise a request; always starts `OPEN` |
+| GET | `/api/requests` | any | the feed, filtered by status, paged |
+| GET | `/api/requests/{id}` | any | one request |
+| POST | `/api/requests/{id}/cancel` | requester (owner) | `OPEN`/`PLEDGED` → `CANCELLED` |
+| POST | `/api/requests/{id}/fulfil` | requester (owner) | `PLEDGED` → `FULFILLED` |
+| GET | `/api/requests/{id}/donors` | requester (owner) | **the core query** — compatible, eligible, available, within `radiusKm`, nearest first |
+| POST | `/api/requests/{id}/pledges` | donor | offer blood; an `OPEN` request becomes `PLEDGED` |
+| GET | `/api/requests/{id}/pledges` | requester (owner) | the offers on it |
+| GET | `/api/donors/me/pledges` | donor | your own offers |
+| POST | `/api/pledges/{id}/accept` | requester (owner) | pick this donor |
+| POST | `/api/pledges/{id}/decline` | requester (owner) | pick somebody else |
+| POST | `/api/pledges/{id}/withdraw` | donor (owner) | pull out |
+| GET | `/api/pledges/{id}/contact` | the two parties | **the only endpoint that returns a phone number**, and only for an `ACCEPTED` pledge. Audited. |
+| GET | `/api/me/reveals` | any | who has seen your number, newest first |
+| GET | `/actuator/health` | public | liveness |
+
+Every failure is an RFC 7807 `ProblemDetail` with a `type` you can branch on,
+and validation failures carry an `errors` map of field to message.
+
+## Operability
+
+**Correlation ids.** Every response carries `X-Correlation-Id`, and every log
+line produced while handling that request carries the same id. Send your own and
+it is echoed back rather than replaced, so a client can join its logs to the
+server's.
+
+```
+2026-09-08 23:52:01.334  INFO [a3f19c7d21b8] [http-nio-8080-exec-4] c.b.p.service.PledgeService : event=pledge_made pledgeId=9 requestId=27 donorId=20 patientGroup=B+ donorGroup=O-
+```
+
+**Nothing logs a phone number.** Not at `DEBUG`, not in an exception message.
+That is why there is no scrubbing layer and no redaction setting: there is
+nothing to scrub. A contact reveal is logged by id — pledge, viewer, revealed
+user, role — because the log records that a reveal happened while the database
+records what was revealed.
+
+**Stale requests expire themselves.** A request still `OPEN` or `PLEDGED` whose
+`neededBy` has passed becomes `EXPIRED` on a schedule, so nobody has to remember
+to tidy up. The comparison is strict — a request needed *today* is still live —
+and the job calls the same state machine every other status change goes through,
+so it can never expire something already fulfilled.
+
+---
+
 ## Layout
 
 ```
 backend/     Spring Boot 3.5 · Java 21 · Flyway · JPA · Testcontainers
+  auth/        registration, login, the JWT filter chain, OpenAPI
+  donor/       profiles, the 8x8 compatibility matrix, the eligibility calculator
+  request/     the request lifecycle, its state machine, the expiry job
+  search/      the one native query: compatible AND eligible AND within N km
+  pledge/      pledges, the contact reveal, the append-only reveal log
+  reference/   seeded thanas and hospitals
+  logging/     the correlation id filter
 frontend/    React 18 · Vite · TypeScript · React Query · plain CSS
+  api/         hand-written types, the only fetch wrapper, query keys
+  auth/        the session and the 401 handler
+  routing/     ~60 lines over the History API
+  screens/     one file per route
 specs/       SPEC-000 template + one spec per issue
 docs/adr/    Architecture decision records
 docs/        BACKLOG.md — the ten issues and their dependencies

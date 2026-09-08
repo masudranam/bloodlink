@@ -21,6 +21,8 @@ import com.bloodlink.request.service.BloodRequestService;
 import com.bloodlink.request.service.NotTheRequesterException;
 import java.util.EnumSet;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +46,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class PledgeService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PledgeService.class);
 
     /** The statuses that keep a request in PLEDGED. */
     private static final Set<PledgeStatus> ACTIVE = EnumSet.of(PledgeStatus.PENDING, PledgeStatus.ACCEPTED);
@@ -123,6 +127,12 @@ public class PledgeService {
         if (request.getStatus() == BloodRequestStatus.OPEN) {
             requests.transition(requestId, BloodRequestStatus.PLEDGED);
         }
+
+        // Symbols, not constant names: a log that says O_NEGATIVE while the API
+        // says O- makes an operator translate between two vocabularies.
+        LOG.info("event=pledge_made pledgeId={} requestId={} donorId={} patientGroup={} donorGroup={}",
+                pledge.getId(), requestId, donor.getId(),
+                patientGroup.getSymbol(), donor.getBloodGroup().getSymbol());
 
         return toResponse(pledge);
     }
@@ -231,6 +241,10 @@ public class PledgeService {
         // withdrawal that is still PENDING in the database would count itself as
         // active and leave the request stranded in PLEDGED.
         returnRequestToOpenIfNothingActiveIsLeft(pledge.getRequest());
+
+        LOG.info("event=pledge_answered pledgeId={} requestId={} status={} requestStatus={}",
+                pledge.getId(), pledge.getRequest().getId(), target, pledge.getRequest().getStatus());
+
         return toResponse(pledge);
     }
 

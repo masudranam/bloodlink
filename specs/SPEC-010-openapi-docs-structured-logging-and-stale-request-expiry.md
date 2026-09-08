@@ -1,6 +1,6 @@
 # SPEC-010: OpenAPI docs, structured logging and stale request expiry
 
-**Status:** Draft
+**Status:** Implemented
 **Issue:** #10 (backlog item 10)
 **Depends on:** SPEC-009
 
@@ -92,9 +92,13 @@ contract a reviewer can read to confirm that no list endpoint returns a phone nu
 - **AC-13:** `GET /v3/api-docs` returns a document listing every endpoint, each under a tag, with
   the `bearer-jwt` security scheme declared. Swagger UI at `/swagger-ui.html` can authorise and
   call a protected endpoint.
-- **AC-14:** The document is checkable against the privacy rule: no schema for any list or page
-  response declares a `phone` property. Exactly one schema does — the contact response's
-  counterparty.
+- **AC-14:** The document is checkable against the privacy rule: exactly one schema reachable
+  from a **response** declares a `phone` property — the contact response's counterparty.
+  > **Refined during implementation.** As merged this criterion said "exactly one schema does",
+  > which is not quite true and the verification caught it: `LoginRequest` and `RegisterRequest`
+  > also declare a phone, because you have to send your own number to sign up and sign in. The
+  > claim is about responses, and the check now walks `responses` and `requestBody` separately
+  > rather than looking at `components.schemas` as a flat list. No code changed.
 - **AC-15:** The README states what the project is, the three pillars, the commands to run
   everything, the full endpoint list with its role gates, the environment variables, and where
   the specs and ADRs live. Someone who has never seen the repository can start it from the README
@@ -149,3 +153,4 @@ copy of it.
 | ---- | ------ | ---- |
 | 2026-09-03 | Draft | Stub created with the repo skeleton. |
 | 2026-09-08 | Draft | Filled in: expiry through the state machine, a correlation id, and no phone number in any log. |
+| 2026-09-08 | Implemented | All 15 criteria verified. 0 phone numbers in 15 KB of DEBUG log. AC-14's wording refined, see the note there. |
